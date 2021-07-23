@@ -1,28 +1,43 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"sync"
 )
+type count struct {
+	m map[string] int
+	mu sync.Mutex
+}
+func (countMap *count)countLetters(s string,wg *sync.WaitGroup) {
+	defer wg.Done()
+	for _,i:=range s{
 
+		countMap.mu.Lock()
+		countMap.m[string(i)] = countMap.m[string(i)]+1
+		countMap.mu.Unlock()
+	}
+}
 func main() {
-	data := &[...]string{"quick", "brown", "fox", "lazy", "dog"}
-	mymap := make(map[string]int)
+	data := [5]string{"quick", "brown", "fox", "lazy", "dog"}
+	var countMap = count{make(map[string]int),sync.Mutex{}}
+
 	var wg sync.WaitGroup
-	// wg := sync.WaitGroup
-	for _, v := range data {
+	//fmt.Println("Check")
+	for  _,v := range data {
 		wg.Add(1)
-		go func(s string) {
-			fmt.Println("Entering ", s)
-			defer wg.Done()
-			for _, w := range s {
-				mymap[string(w)] = mymap[string(w)] + 1
-			}
-			fmt.Println("Leaving ", s)
-		}(v)
+		countMap.countLetters(v,&wg)
 	}
+
 	wg.Wait()
-	for s := "a"; s <= "z"; s = string(s[0] + 1) {
-		fmt.Println(s+" ", mymap[s])
+	empData, err := json.Marshal(countMap.m)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
 	}
+
+	jsonStr := string(empData)
+	fmt.Println("The JSON data is:")
+	fmt.Println(jsonStr)
+	//fmt.Println(countmap.m)
 }
