@@ -3,9 +3,10 @@ package Controllers
 
 import (
 	"fmt"
+	"net/http"
+
 	"freshers_bootcamp/day3/exercise2/Models"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 //GetUsers ... Get all users
 func GetUsers(c *gin.Context) {
