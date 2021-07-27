@@ -1,16 +1,18 @@
 package Models
 
 import (
-	"fmt"
 	"freshers_bootcamp/day4/Config"
+	global "freshers_bootcamp/day4/Global"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 //GetAllProducts.... Fetch all products data
 func GetAllProducts(product *[]Product) (err error) {
+	global.Mutex.Lock()
 	if err = Config.DB.Find(product).Error; err != nil {
 		return err
 	}
+	defer global.Mutex.Unlock()
 	return nil
 }
 
@@ -32,13 +34,16 @@ func GetProductByID(product *Product, Id string) (err error) {
 
 //UpdateProduct ... Update product
 func UpdateProduct(product *Product, Id string) (err error) {
-	fmt.Println(product)
+	global.Mutex.Lock()
 	Config.DB.Save(product)
+	defer global.Mutex.Unlock()
 	return nil
 }
 
 //DeleteProduct ... Delete product
 func DeleteProduct(product *Product, Id string) (err error) {
+	global.Mutex.Lock()
 	Config.DB.Where("id = ?", Id).Delete(product)
+	defer global.Mutex.Unlock()
 	return nil
 }

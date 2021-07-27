@@ -1,4 +1,3 @@
-//Models/UserModel.go
 package Models
 
 type Customer struct {

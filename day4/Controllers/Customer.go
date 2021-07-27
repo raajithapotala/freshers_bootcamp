@@ -15,12 +15,11 @@ func GetCustomers(c *gin.Context) {
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
-		c.JSON(http.StatusOK,customer)
+		c.JSON(http.StatusOK, customer)
 	}
 }
 
 //Create Customer
-
 func CreateCustomer(c *gin.Context) {
 	var customer Models.Customer
 	c.BindJSON(&customer)
@@ -29,12 +28,11 @@ func CreateCustomer(c *gin.Context) {
 		fmt.Println(err.Error())
 		c.AbortWithStatus(http.StatusNotFound)
 	} else {
-		c.JSON(http.StatusOK,customer)
+		c.JSON(http.StatusOK, customer)
 	}
 }
 
 //Get the Order by id
-
 func GetCustomerByID(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var customer Models.Customer

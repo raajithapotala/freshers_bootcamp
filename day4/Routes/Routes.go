@@ -8,27 +8,31 @@ import (
 //SetupRouter ... Configure routes
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
-	grp1 := r.Group("/product-api")
+
+	//For accessing the Product Database
+	prod := r.Group("/product-api")
 	{
-		grp1.GET("product", Controllers.GetProducts)
-		grp1.POST("product", Controllers.CreateProduct)
-		grp1.GET("product/:id", Controllers.GetProductByID)
-		grp1.PATCH("product/:id", Controllers.UpdateProduct)
-		grp1.DELETE("product/:id", Controllers.DeleteProduct)
+		prod.GET("product", Controllers.GetProducts)
+		prod.POST("product", Controllers.CreateProduct)
+		prod.GET("product/:id", Controllers.GetProductByID)
+		prod.PATCH("product/:id", Controllers.UpdateProduct)
+		prod.DELETE("product/:id", Controllers.DeleteProduct)
 	}
 
-	grp2 := r.Group("/customer-api")
+    // For accessing the Customer Database
+	cust := r.Group("/customer-api")
 	{
-		grp2.GET("customer", Controllers.GetCustomers)
-		grp2.POST("customer", Controllers.CreateCustomer)
-		grp2.GET("customer/:id", Controllers.GetCustomerByID)
+		cust.GET("customer", Controllers.GetCustomers)
+		cust.POST("customer", Controllers.CreateCustomer)
+		cust.GET("customer/:id", Controllers.GetCustomerByID)
 	}
 
-	grp3 := r.Group("/order-api")
+	//For accessing the Orders Database
+	order := r.Group("/order-api")
 	{
-		grp3.GET("order", Controllers.GetOrders)
-		grp3.POST("order", Controllers.CreateOrder)
-		grp3.GET("order/:id", Controllers.GetOrderByID)
+		order.GET("order", Controllers.GetOrders)
+		order.POST("order", Controllers.CreateOrder)
+		order.GET("order/:id", Controllers.GetOrderByID)
 	}
 
 	return r
