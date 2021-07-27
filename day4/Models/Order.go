@@ -21,7 +21,7 @@ func CreateOrder(order *Order) (err error) {
 	return nil
 }
 
-//GetOrderByID ... Fetch only one product by Id
+//GetOrderByID ... Fetch only one order by Id
 func GetOrderByID(order *Order, Id string) (err error) {
 	if err = Config.DB.Where("id = ?", Id).First(order).Error; err != nil {
 		return err
