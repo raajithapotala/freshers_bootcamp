@@ -15,6 +15,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+//Testing the getProduct api
 func TestGetProduct(t *testing.T) {
 	//SQL Connection using GORM
 	Config.DB, _ = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
@@ -44,6 +45,7 @@ func TestGetProduct(t *testing.T) {
 
 }
 
+//Testing the creating product data
 func TestCreateProd(t *testing.T) {
 	//SQL Connection using GORM
 	Config.DB, _ = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
@@ -80,6 +82,7 @@ func TestCreateProd(t *testing.T) {
 
 }
 
+// Testing the updation api
 func TestUpdateProduct(t *testing.T) {
 	//SQL database using GORM
 	Config.DB, _ = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
@@ -106,6 +109,7 @@ func TestUpdateProduct(t *testing.T) {
 	}
 }
 
+//Testing the delete API
 func TestDeleteProduct(t *testing.T) {
 	//SQL Connection using GORM
 	Config.DB, _ = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
@@ -125,4 +129,71 @@ func TestDeleteProduct(t *testing.T) {
 		t.Errorf("handler returned unexpected body: got %v want %v",
 			response.Code, 200)
 	}
+}
+
+//Testing the get customer api
+func TestGetCustomer(t *testing.T) {
+	//SQL Connection using GORM
+	Config.DB, _ = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
+	defer Config.DB.Close()
+
+	//Setting the router
+	router := Routes.SetupRouter()
+	router.GET("/customer-api/customer/", Controllers.GetCustomers)
+
+	//Get request
+	request, _ := http.NewRequest("GET", "/customer-api/customer/", nil)
+
+	//Recording the response
+	response := httptest.NewRecorder()
+	router.ServeHTTP(response, request)
+
+	if status := response.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, http.StatusOK)
+	}
+
+	expectedOutput := `[{"id":123,"name":"Raaj","email":"xyz","phone":"7014401231","location":"India"},{"id":1234,"name":"Raaj","email":"xyz","phone":"7014401231","location":"India"}]`
+	if response.Body.String() != expectedOutput {
+		t.Errorf("handler returned unexpected body: got %v want %v",
+			response.Body.String(), expectedOutput)
+	}
+
+}
+
+//Testing the create api for customer database
+func TestCreateCust(t *testing.T) {
+	//SQL Connection using GORM
+	Config.DB, _ = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
+	Config.DB.AutoMigrate(&Models.Customer{})
+
+	//Setting the router
+	router := Routes.SetupRouter()
+	router.POST("/customer-api/customer/", Controllers.CreateCustomer)
+
+	//send request
+	newcust := Models.Customer{
+		Id: 131,
+		Name: "Sample",
+		Email : "hello",
+		Phone : "898764567",
+		Location : "US",
+	}
+
+	responseBody, _ := json.Marshal(newcust)
+	req, _ := http.NewRequest("POST", "/customer-api/customer/", bytes.NewBuffer([]byte(responseBody)))
+	response := httptest.NewRecorder()
+	router.ServeHTTP(response, req)
+
+	if status := response.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, http.StatusOK)
+	}
+
+	expectedOutput := `{"id":131,"name":"Sample","email":"hello","phone":"898764567","location":"US"}`
+	if response.Body.String() != expectedOutput {
+		t.Errorf("handler returned unexpected body: got %v want %v",
+			response.Body.String(), expectedOutput)
+	}
+
 }
