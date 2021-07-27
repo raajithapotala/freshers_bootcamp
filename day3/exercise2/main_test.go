@@ -15,10 +15,9 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-
 func TestGet(t *testing.T) {
 	//SQL Connection using GORM
-	Config.DB,_ = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
+	Config.DB, _ = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
 	defer Config.DB.Close()
 
 	//Setting the router
@@ -47,25 +46,24 @@ func TestGet(t *testing.T) {
 
 func TestPost(t *testing.T) {
 	//SQL Connection using GORM
-	Config.DB,_ = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
+	Config.DB, _ = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
 	Config.DB.AutoMigrate(&Models.User{})
-
 
 	//Setting the router
 	router := Routes.SetupRouter()
-	router.POST("/user-api/user/",Controllers.CreateUser)
+	router.POST("/user-api/user/", Controllers.CreateUser)
 
 	//send request
 	newStud := Models.User{
-		Name: "Test",
+		Name:     "Test",
 		LastName: "Check",
-		DOB: "xyz",
-		Address: "location",
-		Subject: "Maths",
-		Marks: 85,
+		DOB:      "xyz",
+		Address:  "location",
+		Subject:  "Maths",
+		Marks:    85,
 	}
 
-	responseBody,_ := json.Marshal(newStud)
+	responseBody, _ := json.Marshal(newStud)
 	req, _ := http.NewRequest("POST", "/user-api/user/", bytes.NewBuffer([]byte(responseBody)))
 	response := httptest.NewRecorder()
 	router.ServeHTTP(response, req)
@@ -85,20 +83,20 @@ func TestPost(t *testing.T) {
 
 func TestPut(t *testing.T) {
 	//SQL database using GORM
-	Config.DB,_ = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
+	Config.DB, _ = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
 	Config.DB.AutoMigrate(&Models.User{})
 
 	//setting up router
 	router := Routes.SetupRouter()
-	router.PUT("/user-api/user/1",Controllers.UpdateUser)
+	router.PUT("/user-api/user/1", Controllers.UpdateUser)
 
 	//send request
 	newStudent := Models.User{
 		LastName: "P",
-		Marks:     85,
+		Marks:    85,
 	}
 
-	responseBody,_ := json.Marshal(newStudent)
+	responseBody, _ := json.Marshal(newStudent)
 	req, _ := http.NewRequest("PUT", "/user-api/user/1/", bytes.NewBuffer([]byte(responseBody)))
 	response := httptest.NewRecorder()
 	router.ServeHTTP(response, req)
@@ -112,12 +110,12 @@ func TestPut(t *testing.T) {
 
 func TestDelete(t *testing.T) {
 	//SQL Connection using GORM
-	Config.DB,_ = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
+	Config.DB, _ = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
 	defer Config.DB.Close()
 
 	//setup router
 	router := Routes.SetupRouter()
-	router.DELETE("/user-api/user/2/",Controllers.DeleteUser )
+	router.DELETE("/user-api/user/2/", Controllers.DeleteUser)
 
 	//Get request
 	req, _ := http.NewRequest("DELETE", "/user-api/user/21/", nil)

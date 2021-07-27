@@ -1,9 +1,10 @@
-
 package Routes
+
 import (
-"freshers_bootcamp/day3/exercise2/Controllers"
-"github.com/gin-gonic/gin"
+	"freshers_bootcamp/day3/exercise2/Controllers"
+	"github.com/gin-gonic/gin"
 )
+
 //SetupRouter ... Configure routes
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
@@ -17,4 +18,3 @@ func SetupRouter() *gin.Engine {
 	}
 	return r
 }
-

@@ -1,5 +1,6 @@
 //Routes/Routes.go
 package Routes
+
 import (
 	"freshers_bootcamp/day3/exercise1/Controllers"
 	"github.com/gin-gonic/gin"

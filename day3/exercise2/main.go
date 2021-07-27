@@ -1,5 +1,6 @@
 //main.go
 package main
+
 import (
 	"fmt"
 	"freshers_bootcamp/day3/exercise2/Config"
@@ -7,7 +8,9 @@ import (
 	"freshers_bootcamp/day3/exercise2/Routes"
 	"github.com/jinzhu/gorm"
 )
+
 var err error
+
 func main() {
 	Config.DB, err = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
 	if err != nil {

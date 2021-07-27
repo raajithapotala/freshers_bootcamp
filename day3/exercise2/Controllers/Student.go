@@ -8,6 +8,7 @@ import (
 	"freshers_bootcamp/day3/exercise2/Models"
 	"github.com/gin-gonic/gin"
 )
+
 //GetUsers ... Get all users
 func GetUsers(c *gin.Context) {
 	var user []Models.User
@@ -18,6 +19,7 @@ func GetUsers(c *gin.Context) {
 		c.JSON(http.StatusOK, user)
 	}
 }
+
 //CreateUser ... Create User
 func CreateUser(c *gin.Context) {
 	var user Models.User
@@ -30,6 +32,7 @@ func CreateUser(c *gin.Context) {
 		c.JSON(http.StatusOK, user)
 	}
 }
+
 //GetUserByID ... Get the user by id
 func GetUserByID(c *gin.Context) {
 	id := c.Params.ByName("id")
@@ -41,6 +44,7 @@ func GetUserByID(c *gin.Context) {
 		c.JSON(http.StatusOK, user)
 	}
 }
+
 //UpdateUser ... Update the user information
 func UpdateUser(c *gin.Context) {
 	var user Models.User
@@ -57,6 +61,7 @@ func UpdateUser(c *gin.Context) {
 		c.JSON(http.StatusOK, user)
 	}
 }
+
 //DeleteUser ... Delete the user
 func DeleteUser(c *gin.Context) {
 	var user Models.User
