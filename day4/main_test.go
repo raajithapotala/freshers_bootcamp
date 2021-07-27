@@ -197,3 +197,69 @@ func TestCreateCust(t *testing.T) {
 	}
 
 }
+
+//Testing the get order api
+func TestGetOrder(t *testing.T) {
+	//SQL Connection using GORM
+	Config.DB, _ = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
+	defer Config.DB.Close()
+
+	//Setting the router
+	router := Routes.SetupRouter()
+	router.GET("/order-api/order/", Controllers.GetOrders)
+
+	//Get request
+	request, _ := http.NewRequest("GET", "/order-api/order/", nil)
+
+	//Recording the response
+	response := httptest.NewRecorder()
+	router.ServeHTTP(response, request)
+
+	if status := response.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, http.StatusOK)
+	}
+
+	expectedOutput := ``
+	if response.Body.String() != expectedOutput {
+		t.Errorf("handler returned unexpected body: got %v want %v",
+			response.Body.String(), expectedOutput)
+	}
+
+}
+
+// Testing the order placing api
+func TestPlaceOrder(t *testing.T) {
+	//SQL Connection using GORM
+	Config.DB, _ = gorm.Open("mysql", Config.DbURL(Config.BuildDBConfig()))
+	Config.DB.AutoMigrate(&Models.Customer{})
+
+	//Setting the router
+	router := Routes.SetupRouter()
+	router.POST("/order-api/order/", Controllers.CreateOrder)
+
+	//send request
+	neworder := Models.Order{
+		OrderId: 15,
+		ProductID: 131,
+		CustomerID: 130,
+		Quantity: 1,
+	}
+
+	responseBody, _ := json.Marshal(neworder)
+	req, _ := http.NewRequest("POST", "/order-api/order/", bytes.NewBuffer([]byte(responseBody)))
+	response := httptest.NewRecorder()
+	router.ServeHTTP(response, req)
+
+	if status := response.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, http.StatusOK)
+	}
+
+	expectedOutput := `{"id":131,"name":"Sample","email":"hello","phone":"898764567","location":"US"}`
+	if response.Body.String() != expectedOutput {
+		t.Errorf("handler returned unexpected body: got %v want %v",
+			response.Body.String(), expectedOutput)
+	}
+
+}
